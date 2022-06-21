@@ -17,5 +17,12 @@
         echo $element['username'] . '<br>';
     }
     ?>
+
+    <?php
+    $data = new data();
+    foreach($data->allMongo() as $element){
+        echo $element->review. '<br>';
+    }
+    ?>
 </body>
 </html>

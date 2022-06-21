@@ -18,4 +18,14 @@ class data extends Dbh
         }
         return false;
     }
+    public function allMongo(){
+       
+        $reviews=$this->connectMongo()->reviews->find();
+
+        if($reviews){
+            return $reviews;
+        }
+        return false;
+    }
+
 }
