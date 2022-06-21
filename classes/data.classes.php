@@ -18,4 +18,19 @@ class data extends Dbh
         }
         return false;
     }
+    public function find($index)
+    {
+        $sql = '
+        SELECT * FROM users
+        WHERE username = ?;
+        ';
+        $stmt = $this->connect()->prepare($sql);
+
+        $stmt->execute(array($index));
+        $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($user) {
+            return $user;
+        }
+        return "nothing found";
+    }
 }
