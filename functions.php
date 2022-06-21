@@ -1,4 +1,6 @@
+
 <?php 
+#fungsi
 $db=mysqli_connect("localhost","root","","final-pemodelan");
 
 function query($query){
