@@ -32,18 +32,47 @@ class data extends Dbh
 
 
 
-    public function findTopGenre($index){
+    public function findTopGenre(){
         $sql = '
-        SELECT movie_name, count(movie_id) as "total" FROM movies LIMIT ? ORDER BY "total" DESC;
+        SELECT genre, COUNT(*) as total
+        FROM movies 
+        GROUP BY genre
+        ORDER BY total DESC;
         ';
+        // $sql = '
+        // SELECT m1.genre, COUNT(*) as total
+        // FROM movies m1
+        // JOIN movies m2
+        // ON FIND_IN_SET(m1.genre, m2.genre)
+        // GROUP BY genre
+        // ORDER BY total DESC;
+        // ';
 
-        $stmt = $this->connect()->prepare($sql);
 
-        $stmt->execute(array($index));
+        $stmt = $this->connect()->query($sql);
         $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($movies) {
             return $movies;
+        }
+        return false;
+    }
+
+    public function userCountry(){
+        $sql = '
+        SELECT c.country_name, COUNT(*) as total
+        FROM users u
+        JOIN countries c
+        ON  u.country_id = c.country_id
+        GROUP BY c.country_name
+        ORDER BY total DESC;
+        ';
+
+        $stmt = $this->connect()->query($sql);
+        $country = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($country) {
+            return $country;
         }
         return false;
     }
