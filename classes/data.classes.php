@@ -18,6 +18,20 @@ class data extends Dbh
         }
         return false;
     }
+
+
+    public function allMongo(){
+       //update di sini
+        $reviews=$this->connectMongo()->reviews->find();
+
+        if($reviews){
+            return $reviews;
+        }
+        return false;
+    }
+
+
+
     public function findTopGenre($index){
         $sql = '
         SELECT movie_name, count(movie_id) as "total" FROM movies LIMIT ? ORDER BY "total" DESC;
@@ -33,6 +47,7 @@ class data extends Dbh
         }
         return false;
     }
+
     public function find($index)
     {
         $sql = '
@@ -48,4 +63,5 @@ class data extends Dbh
         }
         return "nothing found";
     }
+
 }
