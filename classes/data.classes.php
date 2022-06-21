@@ -64,4 +64,42 @@ class data extends Dbh
         return "nothing found";
     }
 
+    public function castingCountMongo(){
+
+        $array=[];
+
+            //update di sini
+        $casts=$this->connectMongo()->casts->find();
+        // var_dump($casts);
+        // $assoc=json_decode(json_encode($casts), true);
+        // var_dump($assoc);
+        foreach($casts as $cs){
+            $array[]=$cs->actor_id;
+        }
+      print(gettype($array));
+        if($array){
+            return $array;
+        }
+        return false;
+
+
+    }
+
+    public function avgRatingMongo(){
+
+        $array=[];
+        $reviews=$this->connectMongo()->reviews->find();
+
+        foreach($reviews as $rv){
+            $array[]=$rv->rating;
+        }
+        $average = array_sum($array)/count($array);
+        if($average){
+            return $average;
+        }
+        return false;
+
+
+    }
+
 }
