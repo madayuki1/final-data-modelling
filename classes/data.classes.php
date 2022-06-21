@@ -19,7 +19,7 @@ class data extends Dbh
         return false;
     }
     public function allMongo(){
-       
+       //update di sini
         $reviews=$this->connectMongo()->reviews->find();
 
         if($reviews){
