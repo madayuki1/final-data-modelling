@@ -1,5 +1,5 @@
 <?php
-require '../../vendor/autoload.php';
+require 'vendor/autoload.php';
 class Dbh
 {
     protected function connect()
