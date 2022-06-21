@@ -4,37 +4,20 @@ require 'classes\data.classes.php';
 
 <!DOCTYPE html>
 <html lang="en">
-
+    
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
     <title>Document</title>
 </head>
 
 <body>
-
-    <?php
-    $data = new data();
-    foreach($data->all() as $element){
-        echo $element['username'] . '<br>';
-    }
-    ?>
-
-    <?php
-    $data = new data();
-    foreach($data->allMongo() as $element){
-        echo $element->review. '<br>';
-    }
-    ?>  
-
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
         <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">Close &times;</button>
-        <a href="index2.php" class="w3-bar-item w3-button">Link 1</a>
+        <a href="#" class="w3-bar-item w3-button">Link 1</a>
         <a href="#" class="w3-bar-item w3-button">Link 2</a>
         <a href="#" class="w3-bar-item w3-button">Link 3</a>
     </div>
@@ -48,33 +31,20 @@ require 'classes\data.classes.php';
             </div>
         </div>
 
-        <div class="container">
-            <canvas id='myChart'></canvas>
+        <img src="placeholder.png" alt="Car" style="width:100%">
+
+        <div class="w3-container">
+            <p>In this example, the sidebar is hidden (style="display:none")</p>
+            <p>It is shown when you click on the menu icon in the top left corner.</p>
+            <p>When it is opened, it shifts the page content to the right.</p>
+            <p>We use JavaScript to add a 25% left margin to the div element with id="main" when this happens. The value "25%" matches the width of the sidebar.</p>
         </div>
 
     </div>
 
+
 </body>
 <script>
-    let myChart = document.getElementById('myChart').getContext('2d');
-
-    let chart = new Chart(myChart, {
-        type: 'bar',
-        data: {
-            labels: ['Boston', 'Worcester', 'Springfield'],
-            datasets: [{
-                label: 'Population',
-                data: [
-                    617594,
-                    181045,
-                    153060
-                ],
-                backgroundColor:'green'
-            }]
-        },
-        options: {}
-    });
-
     function w3_open() {
         document.getElementById("main").style.marginLeft = "25%";
         document.getElementById("mySidebar").style.width = "25%";
