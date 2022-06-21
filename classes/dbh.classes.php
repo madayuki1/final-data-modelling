@@ -17,7 +17,7 @@ class Dbh
             die();
         }
     }
-
+    //connect mongo 
     protected function connectMongo(){
 
         try
