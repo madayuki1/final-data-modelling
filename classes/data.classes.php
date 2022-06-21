@@ -18,6 +18,21 @@ class data extends Dbh
         }
         return false;
     }
+    public function findTopGenre($index){
+        $sql = '
+        SELECT movie_name, count(movie_id) as "total" FROM movies LIMIT ? ORDER BY "total" DESC;
+        ';
+
+        $stmt = $this->connect()->prepare($sql);
+
+        $stmt->execute(array($index));
+        $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($movies) {
+            return $movies;
+        }
+        return false;
+    }
     public function find($index)
     {
         $sql = '
