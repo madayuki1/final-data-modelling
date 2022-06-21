@@ -1,10 +1,16 @@
 <?php
 require 'classes\data.classes.php';
+
+$data = new data();
+$arrayGenre = $data->findTopGenre();
+$genreList = json_encode($arrayGenre);
+
+$arrayCountry = $data->userCountry();
+$countryList = json_encode($arrayCountry);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 
 <head>
     <meta charset="UTF-8">
@@ -17,6 +23,7 @@ require 'classes\data.classes.php';
 </head>
 
 <body>
+
 
     <!-- <?php
     $data = new data();
@@ -47,12 +54,11 @@ require 'classes\data.classes.php';
 
     ?>
 
-
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
-        <button class="w3-bar-item w3-button w3-large" onclick="w3_close()">Close &times;</button>
-        <a href="index2.php" class="w3-bar-item w3-button">Link 1</a>
-        <a href="#" class="w3-bar-item w3-button">Link 2</a>
-        <a href="#" class="w3-bar-item w3-button">Link 3</a>
+        <button id="genre" class="w3-bar-item w3-button w3-large" onclick="w3_close()">Close &times;</button>
+        <button class="w3-bar-item w3-button" onclick="topGenre()">Top 5 Genre</button>
+        <button class="w3-bar-item w3-button" onclick="userCountry()">User's Home Country</button>
+        <button class="w3-bar-item w3-button">Link 1</button>
     </div>
 
     <div id="main">
@@ -60,36 +66,129 @@ require 'classes\data.classes.php';
         <div class="w3-teal">
             <button id="openNav" class="w3-button w3-teal w3-xlarge" onclick="w3_open()">&#9776;</button>
             <div class="w3-container">
-                <h1>My Page</h1>
+                <h1>Pemodelan Data</h1>
             </div>
         </div>
 
-        <div class="container">
-            <canvas id='myChart'></canvas>
+        <div class="container" style="position: relative; height:30vh; width:45vw; margin-top:50px">
+        <!-- <div class="container"> -->
+            <canvas id='myChart' ></canvas>
         </div>
+
 
     </div>
 
 </body>
 <script>
     let myChart = document.getElementById('myChart').getContext('2d');
+    function topGenre() {
+        let genreArray = <?php echo $genreList; ?>;
+        let genre = [];
+        let count = [];
 
-    let chart = new Chart(myChart, {
-        type: 'bar',
-        data: {
-            labels: ['Boston', 'Worcester', 'Springfield'],
-            datasets: [{
-                label: 'Population',
-                data: [
-                    617594,
-                    181045,
-                    153060
-                ],
-                backgroundColor:'green'
-            }]
-        },
-        options: {}
-    });
+        for (var i = 0; i < 5; i++) {
+            genre.push(genreArray[i]['genre']);
+        }
+
+        for (var i = 0; i < 5; i++) {
+            count.push(genreArray[i]['total']);
+        }
+        let chartGenre = new Chart(myChart, {
+            type: 'doughnut',
+            data: {
+                labels: genre,
+                datasets: [{
+                    label: 'Number of Records',
+                    data: count,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(52, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                    ]
+                }]
+            },
+            options: {
+                maintainAspectsRatio: false,
+                responsive: true,
+                title:{
+                    display:true,
+                    text: 'Top 5 Movies Genres',
+                    fontSize:25
+                },
+                legend:{
+                    display:true,
+                    position:'right',
+                    labels:{
+                        fontColor:'#000'
+                    }
+                }
+            },
+            layout:{
+                left:0,
+                right:0,
+                bottom:0,
+                top:100
+            }
+        });
+        w3_close();
+    }
+    function userCountry() {
+        let countryArray = <?php echo $countryList; ?>;
+        let country = [];
+        let countryCount = [];
+
+        for (var i = 0; i < 5; i++) {
+            country.push(countryArray[i]['country_name']);
+        }
+
+        for (var i = 0; i < 5; i++) {
+            countryCount.push(countryArray[i]['total']);
+        }
+        let chartCountry = new Chart(myChart, {
+            type: 'bar',
+            data: {
+                labels: country,
+                datasets: [{
+                    label: 'Number of Records',
+                    data: countryCount,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(52, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                    ]
+                }]
+            },
+            options: {
+                maintainAspectsRatio: false,
+                responsive: true,
+                title:{
+                    display:true,
+                    text: 'Top 5 Movies Genres',
+                    fontSize:25
+                },
+                legend:{
+                    display:true,
+                    position:'right',
+                    labels:{
+                        fontColor:'#000'
+                    }
+                }
+            },
+            layout:{
+                left:0,
+                right:0,
+                bottom:0,
+                top:100,
+            }
+        });
+        w3_close();
+    }
+
+
 
     function w3_open() {
         document.getElementById("main").style.marginLeft = "25%";
