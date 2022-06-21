@@ -24,6 +24,36 @@ $countryList = json_encode($arrayCountry);
 
 <body>
 
+
+    <!-- <?php
+    $data = new data();
+    foreach($data->all() as $element){
+        echo $element['username'] . '<br>';
+    }
+    ?>
+
+    <?php
+    $data = new data();
+    foreach($data->allMongo() as $element){
+        echo $element->review. '<br>';
+    }
+    ?>   -->
+    <?php 
+    $data=new data();
+    $assoc=$data->castingCountMongo();
+    $assoc=array_count_values($assoc);
+    var_dump($assoc);
+
+    foreach($assoc as $one => $value){
+        echo $one .'=>'.$value.'<br>';
+    }
+   ?>
+    <?php 
+    $avg=$data->avgRatingMongo();
+    echo $avg;
+
+    ?>
+
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
         <button id="genre" class="w3-bar-item w3-button w3-large" onclick="w3_close()">Close &times;</button>
         <button class="w3-bar-item w3-button" onclick="topGenre()">Top 5 Genre</button>
