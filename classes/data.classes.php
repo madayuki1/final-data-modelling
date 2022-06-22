@@ -3,28 +3,30 @@ require 'dbh.classes.php';
 
 class data extends Dbh
 {
-    public function all()
+    public function all_actor()
     {
         $sql = '
-        SELECT * FROM users;
+        SELECT actor_id, actor_name 
+        FROM actors;
         ';
 
         $stmt = $this->connect()->query($sql);
 
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $actors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($users) {
-            return $users;
+        if ($actors) {
+            return $actors;
         }
         return false;
     }
 
 
-    public function allMongo(){
-       //update di sini
-        $reviews=$this->connectMongo()->reviews->find();
+    public function allMongo()
+    {
+        //update di sini
+        $reviews = $this->connectMongo()->reviews->find();
 
-        if($reviews){
+        if ($reviews) {
             return $reviews;
         }
         return false;
@@ -32,7 +34,8 @@ class data extends Dbh
 
 
 
-    public function findTopGenre(){
+    public function findTopGenre()
+    {
         $sql = '
         SELECT genre, COUNT(*) as total
         FROM movies 
@@ -58,7 +61,8 @@ class data extends Dbh
         return false;
     }
 
-    public function userCountry(){
+    public function userCountry()
+    {
         $sql = '
         SELECT c.country_name, COUNT(*) as total
         FROM users u
@@ -93,42 +97,39 @@ class data extends Dbh
         return "nothing found";
     }
 
-    public function castingCountMongo(){
+    public function castingCountMongo()
+    {
 
-        $array=[];
+        $array = [];
 
-            //update di sini
-        $casts=$this->connectMongo()->casts->find();
+        //update di sini
+        $casts = $this->connectMongo()->casts->find();
         // var_dump($casts);
         // $assoc=json_decode(json_encode($casts), true);
         // var_dump($assoc);
-        foreach($casts as $cs){
-            $array[]=$cs->actor_id;
+        foreach ($casts as $cs) {
+            $array[] = $cs->actor_id;
         }
-      print(gettype($array));
-        if($array){
+        print(gettype($array));
+        if ($array) {
             return $array;
         }
         return false;
-
-
     }
 
-    public function avgRatingMongo(){
+    public function avgRatingMongo()
+    {
 
-        $array=[];
-        $reviews=$this->connectMongo()->reviews->find();
+        $array = [];
+        $reviews = $this->connectMongo()->reviews->find();
 
-        foreach($reviews as $rv){
-            $array[]=$rv->rating;
+        foreach ($reviews as $rv) {
+            $array[] = $rv->rating;
         }
-        $average = array_sum($array)/count($array);
-        if($average){
+        $average = array_sum($array) / count($array);
+        if ($average) {
             return $average;
         }
         return false;
-
-
     }
-
 }
