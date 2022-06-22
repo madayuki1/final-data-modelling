@@ -7,6 +7,19 @@ $genreList = json_encode($arrayGenre);
 
 $arrayCountry = $data->userCountry();
 $countryList = json_encode($arrayCountry);
+
+$assoc = $data->castingCountMongo();
+$assoc = array_count_values($assoc);
+// var_dump($assoc);
+$castingCount = array();
+$castingCountActorName = array();
+foreach ($assoc as $one => $value) {
+    // var_dump($one . ' ' . $value);
+    array_push($castingCountActorName, $one);
+    array_push($castingCount, $value);
+
+}
+$allActor = $data->all_actor();
 ?>
 
 <!DOCTYPE html>
@@ -67,7 +80,7 @@ $countryList = json_encode($arrayCountry);
         <button id="genre" class="w3-bar-item w3-button w3-large" onclick="w3_close()">Close &times;</button>
         <button class="w3-bar-item w3-button" onclick="topGenre()">Top 5 Genre</button>
         <button class="w3-bar-item w3-button" onclick="userCountry()">User's Home Country</button>
-        <button class="w3-bar-item w3-button">Link 1</button>
+        <button class="w3-bar-item w3-button" onclick="castCount()">Actor Cast Count</button>
     </div>
 
     <div id="main">
@@ -80,8 +93,8 @@ $countryList = json_encode($arrayCountry);
         </div>
 
         <div class="container" style="position: relative; height:30vh; width:45vw; margin-top:50px">
-        <!-- <div class="container"> -->
-            <canvas id='myChart' ></canvas>
+            <!-- <div class="container"> -->
+            <canvas id='myChart'></canvas>
         </div>
 
 
@@ -90,6 +103,8 @@ $countryList = json_encode($arrayCountry);
 </body>
 <script>
     let myChart = document.getElementById('myChart').getContext('2d');
+
+
     function topGenre() {
         let genreArray = <?php echo $genreList; ?>;
         let genre = [];
@@ -102,7 +117,7 @@ $countryList = json_encode($arrayCountry);
         for (var i = 0; i < 5; i++) {
             count.push(genreArray[i]['total']);
         }
-        let chartGenre = new Chart(myChart, {
+        let chart = new Chart(myChart, {
             type: 'doughnut',
             data: {
                 labels: genre,
@@ -118,32 +133,19 @@ $countryList = json_encode($arrayCountry);
                     ]
                 }]
             },
-            options: {
-                maintainAspectsRatio: false,
-                responsive: true,
-                title:{
-                    display:true,
-                    text: 'Top 5 Movies Genres',
-                    fontSize:25
-                },
-                legend:{
-                    display:true,
-                    position:'right',
-                    labels:{
-                        fontColor:'#000'
-                    }
-                }
-            },
-            layout:{
-                left:0,
-                right:0,
-                bottom:0,
-                top:100
+            options: {},
+            layout: {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 100
             }
         });
         w3_close();
     }
+
     function userCountry() {
+        myChart.clearRect(0, 0, myChart.width, myChart.height);
         let countryArray = <?php echo $countryList; ?>;
         let country = [];
         let countryCount = [];
@@ -155,7 +157,7 @@ $countryList = json_encode($arrayCountry);
         for (var i = 0; i < 5; i++) {
             countryCount.push(countryArray[i]['total']);
         }
-        let chartCountry = new Chart(myChart, {
+        let chart = new Chart(myChart, {
             type: 'bar',
             data: {
                 labels: country,
@@ -171,33 +173,68 @@ $countryList = json_encode($arrayCountry);
                     ]
                 }]
             },
-            options: {
-                maintainAspectsRatio: false,
-                responsive: true,
-                title:{
-                    display:true,
-                    text: 'Top 5 Movies Genres',
-                    fontSize:25
-                },
-                legend:{
-                    display:true,
-                    position:'right',
-                    labels:{
-                        fontColor:'#000'
-                    }
-                }
-            },
-            layout:{
-                left:0,
-                right:0,
-                bottom:0,
-                top:100,
+            options: {},
+            layout: {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 100
             }
         });
         w3_close();
     }
 
+    function castCount() {
 
+        let castingCount = <?php echo json_encode($castingCount); ?>
+
+        let castingCountActorName = <?php echo json_encode($castingCountActorName); ?>
+
+        let chartGenre = new Chart(myChart, {
+            type: 'line',
+            data: {
+                labels: castingCountActorName,
+                datasets: [{
+                    label: 'Number of Records',
+                    data: castingCount,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(52, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                    ]
+                }]
+            },
+            options: {
+                maintainAspectsRatio: false,
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Top 5 Movies Genres',
+                    fontSize: 25
+                },
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        fontColor: '#000'
+                    }
+                }
+            },
+            layout: {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 100
+            }
+        });
+        w3_close();
+    }
+
+    function rating() {
+
+    }
 
     function w3_open() {
         document.getElementById("main").style.marginLeft = "25%";
