@@ -8,18 +8,19 @@ $genreList = json_encode($arrayGenre);
 $arrayCountry = $data->userCountry();
 $countryList = json_encode($arrayCountry);
 
-$assoc = $data->castingCountMongo();
-$assoc = array_count_values($assoc);
-// var_dump($assoc);
-$castingCount = array();
-$castingCountActorName = array();
-foreach ($assoc as $one => $value) {
-    // var_dump($one . ' ' . $value);
-    array_push($castingCountActorName, $one);
-    array_push($castingCount, $value);
+// $assoc = $data->castingCountMongo();
+// $assoc = array_count_values($assoc);
+// // var_dump($assoc);
+// $castingCount = array();
+// $castingCountActorName = array();
+// foreach ($assoc as $one => $value) {
+//     // var_dump($one . ' ' . $value);
+//     array_push($castingCountActorName, $one);
+//     array_push($castingCount, $value);
 
-}
-$allActor = $data->all_actor();
+// }
+$actorCount=$data->actorCountMongoPMA();
+$movieRate=$data->avgRatingMongo();
 ?>
 
 <!DOCTYPE html>
@@ -37,50 +38,14 @@ $allActor = $data->all_actor();
 
 <body>
 
-
-    <!-- <?php
-    $data = new data();
-    foreach($data->all() as $element){
-        echo $element['username'] . '<br>';
-    }
-    ?>
-
-    <?php
-    $data = new data();
-    foreach($data->allMongo() as $element){
-        echo $element->review. '<br>';
-    }
-    ?>   -->
-    <?php 
-    $data=new data();
-    $assoc=$data->castingCountMongo();
-    $assoc=array_count_values($assoc);
-    var_dump($assoc);
-
-    foreach($assoc as $one => $value){
-        echo $one .'=>'.$value.'<br>';
-    }
-   ?>
-    <?php 
-
-    print "<br>";
-    print "<br>";
-    $avg=$data->avgRatingMongo();
-    var_dump($avg);
-
-    print "<br>";
-    print "<br>";
-
-    $count=$data->actorCountMongoPMA();
-    var_dump($count);
-
-    ?>
+    
 
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
         <button id="genre" class="w3-bar-item w3-button w3-large" onclick="w3_close()">Close &times;</button>
         <button class="w3-bar-item w3-button" onclick="topGenre()">Top 5 Genre</button>
         <button class="w3-bar-item w3-button" onclick="userCountry()">User's Home Country</button>
         <button class="w3-bar-item w3-button" onclick="castCount()">Actor Cast Count</button>
+        <button class="w3-bar-item w3-button" onclick="rating()">Movie Rating</button>
     </div>
 
     <div id="main">
@@ -186,17 +151,20 @@ $allActor = $data->all_actor();
 
     function castCount() {
 
-        let castingCount = <?php echo json_encode($castingCount); ?>
+        let actorArray = <?=json_encode($actorCount)?>;
+        let actor = [];
+        let actorCount = [];
 
-        let castingCountActorName = <?php echo json_encode($castingCountActorName); ?>
-
-        let chartGenre = new Chart(myChart, {
-            type: 'line',
+        var actorName = Object.keys(actorArray)
+        var castCount = Object.values(actorArray)
+        
+        let chart = new Chart(myChart, {
+            type: 'bar',
             data: {
-                labels: castingCountActorName,
+                labels: actorName,
                 datasets: [{
                     label: 'Number of Records',
-                    data: castingCount,
+                    data: castCount,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.6)',
                         'rgba(52, 162, 235, 0.6)',
@@ -206,22 +174,7 @@ $allActor = $data->all_actor();
                     ]
                 }]
             },
-            options: {
-                maintainAspectsRatio: false,
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Top 5 Movies Genres',
-                    fontSize: 25
-                },
-                legend: {
-                    display: true,
-                    position: 'right',
-                    labels: {
-                        fontColor: '#000'
-                    }
-                }
-            },
+            options: {},
             layout: {
                 left: 0,
                 right: 0,
@@ -233,7 +186,35 @@ $allActor = $data->all_actor();
     }
 
     function rating() {
-
+        let rateArray = <?=json_encode($movieRate)?>;
+        var movie = Object.keys(rateArray)
+        var rate = Object.values(rateArray)
+        
+        let chart = new Chart(myChart, {
+            type: 'bar',
+            data: {
+                labels: movie,
+                datasets: [{
+                    label: movie,
+                    data: rate,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(52, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                    ]
+                }]
+            },
+            options: {},
+            layout: {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 100
+            }
+        });
+        w3_close();
     }
 
     function w3_open() {
