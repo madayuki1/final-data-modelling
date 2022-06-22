@@ -116,19 +116,97 @@ class data extends Dbh
 
     public function avgRatingMongo(){
 
-        $array=[];
+        $sql = '
+        SELECT * FROM movies;
+        ';
+        $stmt = $this->connect()->query($sql);
+
+        $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $rate=[];
+        $mvid=[];
         $reviews=$this->connectMongo()->reviews->find();
 
         foreach($reviews as $rv){
-            $array[]=$rv->rating;
+            $rate[]=$rv->rating;
+            $mvid[]=$rv->movie_id;
+            
         }
-        $average = array_sum($array)/count($array);
-        if($average){
-            return $average;
+        $sumOfUniq=[];
+        $countOfUniq=[];
+        $avgOfUniq=[];
+        foreach($mvid as $key=>$id){
+            if(array_key_exists($id,$sumOfUniq))
+            {
+                $sumOfUniq[$id]+=$rate[$key];
+                $countOfUniq[$id]+=1;
+
+            }
+            else{
+                $sumOfUniq[$id]=0;
+                $sumOfUniq[$id]+=$rate[$key];
+                $countOfUniq[$id]=0;
+                $countOfUniq[$id]+=1;
+            }
+            
+        }
+        $countRateMovies=[];
+        foreach($sumOfUniq as $key=>$id){
+            $avgOfUniq[$id]=0;
+            $avgOfUniq[$id]=$sumOfUniq[$key]/$countOfUniq[$key];  
+            $found_key = array_search($id, array_column($movies, 'movie_id'));
+            $countRateMovies[$movies[$found_key]['movie_name']]=$avgOfUniq[$id];
+            }
+        
+
+        
+        //var_dump($countMovies);
+
+     
+
+        if($countRateMovies){
+            return $countRateMovies;
         }
         return false;
 
 
+    }
+
+    public function actorCountMongoPMA(){
+       
+        $data=new data();
+        $assoc=$data->castingCountMongo();
+        $assoc=array_count_values($assoc);
+        //var_dump($assoc);
+        
+      
+       
+       
+        $sql = '
+        SELECT actor_id,actor_name FROM actors;
+        ';
+
+        $stmt = $this->connect()->query($sql);
+
+        $actors= $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $countActors=[];
+        // echo $actors[9]['actor_name'];
+        // $found_key = array_search('9', array_column($actors, 'actor_id'));
+        // $found_key = array_search('Gerald Caps', array_column($actors, 'actor_name'));
+
+        // echo $found_key;
+
+        foreach($assoc as $one => $value){
+            
+            $found_key = array_search($one, array_column($actors, 'actor_id'));
+            $countActors[$actors[$found_key]['actor_name']]=$value;
+            }
+        if ($countActors) {
+            return $countActors;
+        }
+        
+        return false;
     }
 
 }

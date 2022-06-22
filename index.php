@@ -49,8 +49,17 @@ $countryList = json_encode($arrayCountry);
     }
    ?>
     <?php 
+
+    print "<br>";
+    print "<br>";
     $avg=$data->avgRatingMongo();
-    echo $avg;
+    var_dump($avg);
+
+    print "<br>";
+    print "<br>";
+
+    $count=$data->actorCountMongoPMA();
+    var_dump($count);
 
     ?>
 
