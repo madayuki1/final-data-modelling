@@ -110,7 +110,6 @@ class data extends Dbh
         foreach ($casts as $cs) {
             $array[] = $cs->actor_id;
         }
-        print(gettype($array));
         if ($array) {
             return $array;
         }
@@ -185,7 +184,7 @@ class data extends Dbh
         }
         return false;
     }
-
+    }
 
     public function actorCountMongoPMA(){
        
@@ -226,5 +225,4 @@ class data extends Dbh
 
 }
 
-}
 
